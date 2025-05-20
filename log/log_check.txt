@@ -1,0 +1,49 @@
+
+ Epoch: 1 | Train Loss: 0.4667 | Train Acc: 0.8419 | Val Loss: 0.1041 | Val Acc: 0.9656
+ Epoch: 2 | Train Loss: 0.0786 | Train Acc: 0.9767 | Val Loss: 0.1453 | Val Acc: 0.9563
+ Epoch: 3 | Train Loss: 0.0446 | Train Acc: 0.9827 | Val Loss: 0.0869 | Val Acc: 0.9719
+ Epoch: 4 | Train Loss: 0.0235 | Train Acc: 0.9925 | Val Loss: 0.0708 | Val Acc: 0.9781
+ Epoch: 5 | Train Loss: 0.0409 | Train Acc: 0.9855 | Val Loss: 0.1737 | Val Acc: 0.9469
+ Epoch: 6 | Train Loss: 0.0429 | Train Acc: 0.9879 | Val Loss: 0.0787 | Val Acc: 0.9750
+ Epoch: 7 | Train Loss: 0.0211 | Train Acc: 0.9939 | Val Loss: 0.0944 | Val Acc: 0.9688
+ Epoch: 8 | Train Loss: 0.0013 | Train Acc: 0.9995 | Val Loss: 0.1041 | Val Acc: 0.9750
+ Epoch: 9 | Train Loss: 0.0003 | Train Acc: 1.0000 | Val Loss: 0.1065 | Val Acc: 0.9719
+ Epoch: 10 | Train Loss: 0.0002 | Train Acc: 1.0000 | Val Loss: 0.1062 | Val Acc: 0.9719
+ Epoch: 11 | Train Loss: 0.0002 | Train Acc: 1.0000 | Val Loss: 0.1060 | Val Acc: 0.9750
+ Epoch: 12 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1066 | Val Acc: 0.9781
+ Epoch: 13 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1067 | Val Acc: 0.9781
+ Epoch: 14 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1074 | Val Acc: 0.9781
+ Epoch: 15 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1077 | Val Acc: 0.9781
+=======================================================================================
+ Epoch: 1 | Train Loss: 0.4667 | Train Acc: 0.8419 | Val Loss: 0.1041 | Val Acc: 0.9656
+ Epoch: 2 | Train Loss: 0.0786 | Train Acc: 0.9767 | Val Loss: 0.1453 | Val Acc: 0.9563
+ Epoch: 3 | Train Loss: 0.0446 | Train Acc: 0.9827 | Val Loss: 0.0869 | Val Acc: 0.9719
+ Epoch: 4 | Train Loss: 0.0235 | Train Acc: 0.9925 | Val Loss: 0.0708 | Val Acc: 0.9781
+ Epoch: 5 | Train Loss: 0.0409 | Train Acc: 0.9855 | Val Loss: 0.1737 | Val Acc: 0.9469
+ Epoch: 6 | Train Loss: 0.0429 | Train Acc: 0.9879 | Val Loss: 0.0787 | Val Acc: 0.9750
+ Epoch: 7 | Train Loss: 0.0211 | Train Acc: 0.9939 | Val Loss: 0.0944 | Val Acc: 0.9688
+ Epoch: 8 | Train Loss: 0.0013 | Train Acc: 0.9995 | Val Loss: 0.1041 | Val Acc: 0.9750
+ Epoch: 9 | Train Loss: 0.0003 | Train Acc: 1.0000 | Val Loss: 0.1065 | Val Acc: 0.9719
+ Epoch: 10 | Train Loss: 0.0002 | Train Acc: 1.0000 | Val Loss: 0.1062 | Val Acc: 0.9719
+ Epoch: 11 | Train Loss: 0.0002 | Train Acc: 1.0000 | Val Loss: 0.1060 | Val Acc: 0.9750
+ Epoch: 12 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1066 | Val Acc: 0.9781
+ Epoch: 13 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1067 | Val Acc: 0.9781
+ Epoch: 14 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1074 | Val Acc: 0.9781
+ Epoch: 15 | Train Loss: 0.0001 | Train Acc: 1.0000 | Val Loss: 0.1077 | Val Acc: 0.9781
+=======================================================================================
+ Epoch: 1 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 2 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 3 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 4 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 5 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 6 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 7 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 8 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 9 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 10 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 11 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 12 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 13 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 14 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+ Epoch: 15 | Train Loss: 6.9078 | Train Acc: 0.4655 | Val Loss: 6.9078 | Val Acc: 0.4656
+=======================================================================================

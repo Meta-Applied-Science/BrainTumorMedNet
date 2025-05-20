@@ -435,7 +435,6 @@ def ensemble_test_step(models: List[torch.nn.Module],
 
             ensemble_softmax /= len(models)
 
-            #TODO: updated loss_fn()
             loss = loss_fn(ensemble_softmax, y) 
             total_loss += loss.item()
 
@@ -548,12 +547,12 @@ def run_vit_experiment(
 
     log_dir = os.path.join(experiment_root, "logs", optimizer_name)
     weight_dir = os.path.join(experiment_root, "weights", optimizer_name)
+
     os.makedirs(log_dir, exist_ok=True)
     os.makedirs(weight_dir, exist_ok=True)
 
     log_path = os.path.join(log_dir, f"{experiment_name}.txt")
     save_path = os.path.join(weight_dir, f"{experiment_name}.pth")
-
 
     set_seeds(seed)
 
@@ -584,8 +583,8 @@ def run_vit_experiment(
     else: 
         raise ValueError(f"Unsupported optimizer {optimizer_name!r}.")
 
-
     num_workers = os.cpu_count() or 1
+    
     train_loader, val_loader, test_loader = create_dataloaders(
         dataset_dir=dataset_dir,
         transform=data_transforms,

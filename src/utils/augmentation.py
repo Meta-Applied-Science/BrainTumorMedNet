@@ -30,6 +30,7 @@ def create_offline_augmented_dataset(
     for subdir, _, files in os.walk(src_root):
         rel = os.path.relpath(subdir, src_root)
         dst_sub = os.path.join(dst_root, rel)
+
         os.makedirs(dst_sub, exist_ok=True)
 
         for fname in files:
@@ -45,7 +46,9 @@ def create_offline_augmented_dataset(
 
             for i in range(factor - 1):
                 aug = offline_aug(img)
+
                 aug_rgb = aug.convert('RGB')
+
                 aug_rgb.save(
                     os.path.join(dst_sub, f"{base}_aug{i + 1}{ext}")
                 )
@@ -73,4 +76,5 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    
     create_offline_augmented_dataset(args.src, args.dst, args.factor)
