@@ -10,9 +10,7 @@ import numpy as np
 
 import random
 
-def load_vit_model(device: torch.device,
-                   model_config: str,
-                   num_classes: int):
+def load_vit_model_config(model_config: str, num_classes: int):
 
     parts = model_config.split(".")
     if len(parts) < 2:
@@ -69,7 +67,7 @@ def load_vit_model(device: torch.device,
 
     return model,model_transforms
 
-def load_cnn_model(device: torch.device, model_config: str, num_classes: int):
+def load_cnn_model_config(device: torch.device, model_config: str, num_classes: int):
     parts = model_config.split(".")
     if len(parts) < 2:
         raise ValueError("Incorrect model_config!")
