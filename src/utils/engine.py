@@ -22,7 +22,7 @@ from torchinfo import summary
 import os
 import sys
 
-from model_utils import load_vit_model, load_cnn_model, set_seeds
+from model_utils import load_vit_model_config, load_cnn_model_config, set_seeds
 from data_loader import create_dataloaders
 
 from torch.utils.data import DataLoader,Subset
@@ -556,7 +556,7 @@ def run_vit_experiment(
 
     set_seeds(seed)
 
-    model, model_transforms = load_vit_model(device, model_cfg, num_classes)
+    model, model_transforms = load_vit_model_config(device, model_cfg, num_classes)
 
     data_transforms = transforms.Compose(
         [

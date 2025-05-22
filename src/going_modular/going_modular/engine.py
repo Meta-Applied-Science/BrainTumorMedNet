@@ -73,7 +73,7 @@ def test_step(model: torch.nn.Module,
               dataloader: torch.utils.data.DataLoader, 
               loss_fn: torch.nn.Module,
               device: torch.device,
-              log:str ='log.pth') -> Tuple[float, float]:
+              log_check:str ='log.txt') -> Tuple[float, float]:
     """Tests a PyTorch model for a single epoch.
 
     Turns a target PyTorch model to "eval" mode and then performs
@@ -124,7 +124,7 @@ def test_step(model: torch.nn.Module,
             # print(wrong_indices.numel() )
 
             if wrong_indices.numel() > 0:
-                with open("/home/ma012/AlexServer/log/path_predict.txt", "a", encoding="utf-8") as file:
+                with open(log_check, "a", encoding="utf-8") as file:
                     for i in range(len(wrong_indices)):
                         file.write(f"{paths[wrong_indices[i]]}\n")
 
@@ -133,7 +133,7 @@ def test_step(model: torch.nn.Module,
     test_loss = test_loss / len(dataloader)
     test_acc = test_acc / len(dataloader)
 
-    with open(f"{log}","a",encoding = "utf-8")  as file:
+    with open(f"{log_check}","a",encoding = "utf-8")  as file:
         file.write(f"\n test loss: {test_loss} | test accuracy: {test_acc}\n===================================================================")
 
     return test_loss, test_acc
