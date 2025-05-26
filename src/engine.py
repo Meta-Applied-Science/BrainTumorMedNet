@@ -527,6 +527,7 @@ def run_vit_experiment(
     ),
     model_config_map: dict | None = None,
     optimizer_config_map: dict | None = None,
+    dataloader_type: str = "flat",
 ) -> dict:
     
     # print(f"--> Start experiment: {model_patch_size}_{img_net}_case{case_num}_{optimizer_name}")
@@ -595,6 +596,7 @@ def run_vit_experiment(
         val_ratio=0.1,
         test_ratio=0.2,
         seed=seed,
+        mode=dataloader_type
     )
 
     loss_fn = nn.CrossEntropyLoss()
@@ -624,3 +626,128 @@ def run_vit_experiment(
         "optimizer_hparams": hparams,
         "weights_path": save_path,
     }
+
+
+def run_cnn_experiment(
+    model_name: str = "B32",
+    case_num: str = "3",
+    optimizer_name: str = "adam",
+    seed: int = 42,
+    dataset_dir: str = "/home/hoai-linh.dao/Works/BraTS/dts/Figshare_x10",
+    num_classes: int = 3,
+    device: torch.device = torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+    experiment_root: str = (
+        "result/self-experiments/extended-dataset-Figshare-x10"
+    ),
+    model_config_map: dict | None = None,
+    optimizer_config_map: dict | None = None,
+    dataloader_type: str = "flat"
+) -> dict:
+    
+    if model_name not in model_config_map:
+        raise ValueError(
+            f"`model_name` must be one of {set(model_config_map)} "
+            f"(got {model_name!r})."
+        )
+
+    try:
+        model_cfg = model_config_map[model_name]
+    except KeyError as exc:
+        raise ValueError(
+            f"No weights found for name={model_name!r}."
+        ) from exc
+
+    experiment_name = f"{model_name}_case{case_num}"
+
+    log_dir = os.path.join(experiment_root, "logs", optimizer_name)
+    weight_dir = os.path.join(experiment_root, "weights", optimizer_name)
+    os.makedirs(log_dir, exist_ok=True)
+    os.makedirs(weight_dir, exist_ok=True)
+
+    log_path = os.path.join(log_dir, f"{experiment_name}.txt")
+    save_path = os.path.join(weight_dir, f"{experiment_name}.pth")
+
+
+    set_seeds(seed)
+
+    model, model_transforms = load_cnn_model(device, model_cfg, num_classes)
+
+    #### Temporary Hard Code for Transforms
+    MEAN = [0.485, 0.456, 0.406]
+    STD = [0.229, 0.224, 0.225]
+
+    DEFAULT_SIZE = (248, 248)
+    CROP_SIZE = 224
+
+    DEFAULT_NORMALIZE = transforms.Normalize(mean=MEAN, std=STD)
+
+    data_transforms = transforms.Compose(
+        [
+            transforms.Grayscale(num_output_channels=3),
+            transforms.Resize(DEFAULT_SIZE, interpolation=InterpolationMode.BILINEAR),
+            transforms.CenterCrop(CROP_SIZE),
+            transforms.ToTensor(),
+            DEFAULT_NORMALIZE
+        ]
+    )
+    ####
+    try:
+        hparams = optimizer_config_map[optimizer_name][case_num]
+    except KeyError:
+        print(
+            f"[SKIP] {experiment_name} – missing hyper-parameters for "
+            f"{optimizer_name!r} / case {case_num}."
+        )
+        return {}
+
+    if optimizer_name == "adadelta":
+        optimizer = torch.optim.Adadelta(model.parameters(), lr=hparams["lr"])
+    elif optimizer_name == "adam":
+        optimizer = torch.optim.Adam(model.parameters(), lr=hparams["lr"])
+    elif optimizer_name == "rmsprop":
+        optimizer = torch.optim.RMSprop(model.parameters(), lr=hparams["lr"])
+    else: 
+        raise ValueError(f"Unsupported optimizer {optimizer_name!r}.")
+
+
+    num_workers = os.cpu_count() or 1
+    train_loader, val_loader, test_loader = create_dataloaders(
+        dataset_dir=dataset_dir,
+        transform=data_transforms,
+        batch_size=hparams["mbs"],
+        num_workers=num_workers,
+        train_ratio=0.7,
+        val_ratio=0.1,
+        test_ratio=0.2,
+        seed=seed,
+        mode=dataloader_type
+    )
+
+    loss_fn = nn.CrossEntropyLoss()
+
+    results = trainVal(
+        model=model,
+        train_dataloader=train_loader,
+        val_dataloader=val_loader,
+        optimizer=optimizer,
+        loss_fn=loss_fn,
+        epochs=hparams["ne"],
+        device=device,
+        save_path=save_path,
+        log=log_path,
+    )
+
+    test_results = test_step(model, test_loader, loss_fn, device)
+
+    with open(log_path, "a", encoding="utf-8") as fh:
+        fh.write(f"\nTest metrics: {test_results}\n")
+        fh.write("=" * 80 + "\n")
+
+    return {
+        "train_val_results": results,
+        "test_results": test_results,
+        "model_config": model_cfg,
+        "optimizer_hparams": hparams,
+        "weights_path": save_path,
+    }
+
