@@ -1,3 +1,7 @@
+
+from torchvision import transforms
+from torchvision.transforms.functional import InterpolationMode
+
 VIT_MODEL_CONFIG_MAP = {
     "B16": {
         "1K": "torchvision.ViT_B_16_Weights.IMAGENET1K_V1",
@@ -27,6 +31,65 @@ CNN_MODEL_CONFIG_MAP = {
     "EfficientNetB0":"torchvision.EfficientNet_B0_Weights.IMAGENET1K_V1",
 }
 
+OTHER_MODEL_CONFIG_MAP = {} # In the Future, we can define the other model that not belong to both cnn and vit
+
+
+_MEAN = [0.485, 0.456, 0.406]
+_STD = [0.229, 0.224, 0.225]
+
+DEFAULT_SIZE = (248, 248)
+CROP_SIZE = 224
+
+TRANSFORMS_CONFIG_MAP = {
+    "vit": lambda vit_transform: transforms.Compose([
+        transforms.Grayscale(num_output_channels=3),
+        vit_transform,
+    ]),
+    "cnn": transforms.Compose([
+        transforms.Grayscale(num_output_channels=3),
+        transforms.Resize(DEFAULT_SIZE, interpolation=InterpolationMode.BILINEAR),
+        transforms.CenterCrop(CROP_SIZE),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=_MEAN, std=_STD),
+    ])
+}
+
+
+DATASET_CONFIG_MAP = {
+    "Br35H": {
+        "path": "dts/Br35H",
+        "dataloader-mode": "binary_class",
+        "num_classes": 2,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    },
+    "BT_Large_4c": {
+        "path": "dts/BT_Large_4c",
+        "dataloader-mode": "split_folder",
+        "num_classes": 4,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+
+    },
+    "Figshare": {
+        "path": "dts/Figshare",
+        "dataloader-mode": "flat",
+        "num_classes": 3,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    },
+    "Figshare_x10": {
+        "path": "dts/Figshare_x10",
+        "dataloader-mode": "flat",
+        "num_classes": 3,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    },
+    "MRI-Scan": {
+        "path": "MRI-Scan",
+        "dataloader-mode": "split_folder",
+        "num_classes": 4,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    }
+}
+
+
 OPTIMIZER_CONFIG_MAP = {
     "adadelta": {
         "1": {"lr": 0.1, "ne": 15, "mbs": 16},
@@ -47,3 +110,29 @@ OPTIMIZER_CONFIG_MAP = {
         "3": {"lr": 5e-5, "ne": 15, "mbs": 32},
     },
 }
+
+METRICS_SUPPORTED = [
+    "accuracy",
+    "confusion_counts",
+    "confusion_matrix",
+    "precision_binary",
+    "recall_binary",
+    "sensitivity",
+    "specificity",
+    "precision_macro",
+    "recall_macro",
+    "f1_macro",
+    "precision_weighted",
+    "recall_weighted",
+    "f1_weighted",
+    "roc_auc_binary",
+    "pr_auc_binary",
+    "roc_auc_ovr",
+    "pr_auc_ovr",
+    "mcc_binary",
+    "kappa_binary",
+    "full", # all above metrics
+]
+
+
+OPTIMIZER_SUPPORTED = ["adadelta", "adam", "rmsprop"]

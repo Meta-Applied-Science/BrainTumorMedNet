@@ -18,15 +18,37 @@ def create_dataloaders(
     test_ratio: float = 0.2,
 ):
     """
-    Unified dataloader creation function.
+    Create PyTorch DataLoaders for train/validation/test splits from an image dataset.
 
-    Parameters:
-    - mode: 
-        "flat" for single folder with class subdirs,
-        "split_folder" for separate Training/Testing folders,
-        "binary_class" for filtering only 'yes' and 'no' classes from a single folder.
+    Supports three folder layouts:
+      - "flat":       Single root folder with class subdirectories.
+      - "split_folder":
+                      Separate "Training" and "Testing" subfolders under root.
+      - "binary_class":
+                      Single folder with multiple classes, but only 'yes'/'no' retained.
+
+    Splits the data according to provided ratios and uses stratified sampling to
+    preserve class distributions.
+
+    Args:
+        dataset_dir:   Path to the dataset root directory.
+        transform:     torchvision transforms to apply to each image.
+        batch_size:    Number of samples per batch.
+        num_workers:   Number of subprocesses for data loading.
+        seed:          Random seed for reproducible splits.
+        mode:          One of "flat", "split_folder", or "binary_class".
+        train_ratio:   Proportion of data for training (default 0.7).
+        val_ratio:     Proportion of data for validation (default 0.1).
+        test_ratio:    Proportion of data for testing (default 0.2).
+
+    Returns:
+        Tuple of (train_loader, val_loader, test_loader), each a torch.utils.data.DataLoader.
+        In "split_folder" mode, the test set is taken from the "Testing" folder.
+        In "binary_class" mode, only samples labeled 'yes' or 'no' are included.
+
+    Raises:
+        ValueError: If `mode` is not one of the supported strings.
     """
-
     if mode == "flat":
         dataset = datasets.ImageFolder(root=dataset_dir, transform=transform)
         indices = list(range(len(dataset)))
