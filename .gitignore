@@ -1,6 +1,8 @@
 log/drive/
 log/ViT
 log/drive/Figshare Augmentation
+log/XAI_plot
+
 dataset
 btc
 tool.ipynb
