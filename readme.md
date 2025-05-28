@@ -22,7 +22,7 @@
 
 - Use the formal kebab-case for branch name.
 
-- Divide 4 main branch divided from `develop` branch:
+- Divide the following four main branch divided from `develop` branch:
 
     1. training
 

@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-from data.dataloaders import create_dataloaders
+from data.data_loaders import create_dataloaders
 from model.utils import load_vit_model, load_cnn_model
 from training.engine import test_step
 from utils.mapping import *

@@ -1,10 +1,34 @@
 import os
 import numpy as np
-import torch
 from torchvision import datasets
 from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
 from typing import Literal
+
+class CustomSubset(torch.utils.data.Dataset):
+    """Subset of a dataset that also returns image file paths."""
+    def __init__(self, dataset, indices):
+        self.dataset = dataset
+        self.indices = indices
+
+    def __getitem__(self, idx):
+        real_idx = self.indices[idx]
+        image, label = self.dataset[real_idx]
+        path = self.dataset.imgs[real_idx][0]  # Get image path
+
+        return image, label, path
+
+    def __len__(self):
+        return len(self.indices)
+    
+class ImageFolderWithPaths(datasets.ImageFolder):
+    def __getitem__(self, index):
+        # Original tuple (image, label)
+        img, label = super().__getitem__(index)
+        # Get the image file path
+        path = self.imgs[index][0]
+
+        return img, label, path
 
 def create_dataloaders(
     dataset_dir: str,
@@ -68,7 +92,7 @@ def create_dataloaders(
 
     elif mode == "split_folder":
         train_dataset_full = datasets.ImageFolder(root=os.path.join(dataset_dir, "Training"), transform=transform)
-        test_dataset = datasets.ImageFolder(root=os.path.join(dataset_dir, "Testing"), transform=transform)
+        test_dataset = ImageFolderWithPaths(root=os.path.join(dataset_dir, "Testing"), transform=transform)
 
         indices = list(range(len(train_dataset_full)))
         labels = train_dataset_full.targets
