@@ -67,7 +67,6 @@ DATASET_CONFIG_MAP = {
         "dataloader-mode": "split_folder",
         "num_classes": 4,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
-
     },
     "Figshare": {
         "path": "dts/Figshare",
