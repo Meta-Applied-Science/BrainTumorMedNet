@@ -6,7 +6,7 @@ log/XAI_plot
 BrainTumorMedNet/src/XAI
 
 dataset
-    
+
 btc
 tool.ipynb
 src/XAI/XAI_results.ipynb
