@@ -1,7 +1,14 @@
+# --------- Duc ---------
 tool.ipynb
-dataset
+
 ntb/check_bun
 ntb/going_modular
 ntb/utils
 ntb/XAI
 ntb/BenchTest.ipynb
+
+
+dts/huggingFace
+dts/MRI_Scan
+
+#--------------------------
