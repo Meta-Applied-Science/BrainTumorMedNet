@@ -7,6 +7,12 @@ BrainTumorMedNet/src/XAI
 
 dataset
 
+ntb/check_bun
+ntb/XAI
+ntb/BenchTest.ipynb
+ntb/utils
+ntb/going_modular
+
 btc
 tool.ipynb
 src/XAI/XAI_results.ipynb

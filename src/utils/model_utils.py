@@ -5,13 +5,29 @@ import torchvision.models as tv_models
 import timm
 from timm.data import resolve_data_config
 from timm.data.transforms_factory import create_transform
-
+from typing import List
 import numpy as np
 
 import random
 
 def load_vit_model_config(model_config: str, num_classes: int):
+    """
+    Load and customize a Vision Transformer model from torchvision or timm.
 
+    Args:
+        device:        torch.device to place the model on.
+        model_config:  Dot-separated string identifying source and pretrained weights,
+                       e.g. "torchvision.ViT_B_16_Weights.IMAGENET1K_V1"
+                       or "timm.vit_base_patch16_224".
+        num_classes:   Number of output classes for the classification head.
+
+    Returns:
+        model:             The ViT model with its head replaced for `num_classes`.
+        model_transforms:  The corresponding torchvision/timm transform pipeline.
+
+    Raises:
+        ValueError: If `model_config` is malformed or the source is unknown.
+    """
     parts = model_config.split(".")
     if len(parts) < 2:
         raise ValueError("Wrong model_config!")
@@ -68,6 +84,24 @@ def load_vit_model_config(model_config: str, num_classes: int):
     return model,model_transforms
 
 def load_cnn_model_config(device: torch.device, model_config: str, num_classes: int):
+    """
+    Load and customize a CNN model from torchvision or timm.
+
+    Args:
+        device:        torch.device to place the model on.
+        model_config:  Dot-separated string identifying source and pretrained weights,
+                       e.g. "torchvision.ResNet50_Weights.IMAGENET1K_V1"
+                       or "timm.resnet50".
+        num_classes:   Number of output classes for the classification head.
+
+    Returns:
+        model:             The CNN model with its final FC/classifier layer reset to `num_classes`.
+        model_transforms:  The corresponding torchvision/timm transform pipeline, or None if unavailable.
+
+    Raises:
+        ValueError: If `model_config` is malformed or the source is unknown.
+                   Also if the model’s classifier structure cannot be identified.
+    """
     parts = model_config.split(".")
     if len(parts) < 2:
         raise ValueError("Incorrect model_config!")
@@ -156,9 +190,56 @@ def load_cnn_model_config(device: torch.device, model_config: str, num_classes: 
     model = model.to(device)
     return model, model_transforms
 
-def set_seeds(seed):
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    random.seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
+def model_info_retrieval(model: nn.Module) -> List:
+    """
+    Extract architecture details from a ViT or CNN model instance.
+
+    Returns a list containing:
+        [model_type_str,
+         patch_size (for ViT) or None,
+         embedding_dimension or None,
+         number_of_layers (ViT) or None,
+         number_of_heads (ViT) or None,
+         total_parameter_count,
+         framework_name ("torchvision", "timm", or "Unknown")]
+
+    If the model is not recognized as a ViT, returns
+        ["CNN-based Model", None, None, None, None, total_params, "Unknown"].
+
+    Always guarantees returning seven elements.
+    """
+    try:
+        is_torchvision_vit = hasattr(model, "conv_proj") and hasattr(model, "encoder")
+        is_timm_vit = hasattr(model, "patch_embed") and hasattr(model, "blocks")
+
+        total_params = sum(p.numel() for p in model.parameters())
+
+        if not (is_torchvision_vit or is_timm_vit):
+            return ["CNN-based Model", None, None, None, None, total_params, "Unknown"]
+
+        if is_torchvision_vit:
+            embed_dim = model.conv_proj.out_channels
+            patch_size = model.conv_proj.kernel_size[0]
+            num_layers = len(model.encoder.layers)
+            num_heads = model.encoder.layers[0].self_attention.num_heads
+            framework = "torchvision"
+        else:
+            embed_dim = model.patch_embed.proj.out_channels
+            patch_size = model.patch_embed.proj.kernel_size[0]
+            num_layers = len(model.blocks)
+            num_heads = model.blocks[0].attn.num_heads
+            framework = "timm"
+
+        vit_type = (
+            "ViT-Base" if embed_dim == 768
+            else "ViT-Large" if embed_dim == 1024
+            else f"ViT-Custom (embed_dim={embed_dim})"
+        )
+
+        return [vit_type, patch_size, embed_dim, num_layers, num_heads, total_params, framework]
+
+    except Exception:
+        total_params = sum(p.numel() for p in model.parameters())
+        return ["Unknown Model", None, None, None, None, total_params, "Unknown"]
+
+
