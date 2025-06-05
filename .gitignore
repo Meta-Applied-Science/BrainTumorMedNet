@@ -5,8 +5,6 @@ log/XAI_plot
 
 BrainTumorMedNet/src/XAI
 
-dataset
-
 ntb/check_bun
 ntb/XAI
 ntb/BenchTest.ipynb
@@ -17,3 +15,7 @@ btc
 tool.ipynb
 src/XAI/XAI_results.ipynb
 src/XAI/XAI_phase2(2).ipynb
+
+dts/Figshare_x10
+dts/huggingFace
+dts/MRI_Scan
