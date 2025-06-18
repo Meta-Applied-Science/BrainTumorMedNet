@@ -52,6 +52,7 @@ def evaluate_checkpoint_on_dataset(
 
     # Model config & transforms
     model_type = get_model_type(model_name)
+    
     if model_type == "vit":
         patch, img_net = model_name.split("_", 1)
         model_cfg, model_tfms = get_vit_model_config(patch, img_net), None

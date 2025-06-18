@@ -19,9 +19,6 @@ def set_seeds(seed: int = 42) -> None:
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
-
-
-
 # === XAI Task ===
 # Prepare data transformation pipeline
 
@@ -58,3 +55,25 @@ def unnormalize(tensor, mean, std):
     std = torch.tensor(std).view(3, 1, 1)
     
     return tensor * std + mean
+
+def load_model_checkpoint(model: torch.nn.Module, 
+                          checkpoint_path: str, 
+                          device: torch.device) -> torch.nn.Module:
+    
+    state_dict = torch.load(checkpoint_path, map_location=device)
+
+    # Remap keys cho classifier head nếu cần
+    new_state_dict = {}
+    for k, v in state_dict.items():
+        if k.startswith("heads.") and not k.startswith("heads.head."):
+            new_key = "heads.head." + k[len("heads."):]
+            new_state_dict[new_key] = v
+        else:
+            new_state_dict[k] = v
+
+    # Load state dict đã được remap vào model
+    model.load_state_dict(new_state_dict)
+    model.to(device)
+    model.eval()
+
+    return model

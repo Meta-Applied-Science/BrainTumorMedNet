@@ -12,6 +12,9 @@ dts/huggingFace
 dts/MRI_Scan
 
 #--------------------------
-
 bread
 btc
+log
+dts/MRI_Scan_2
+src/data/__pycache__
+src/utils/__pycache__
