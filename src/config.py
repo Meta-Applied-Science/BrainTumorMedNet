@@ -19,6 +19,23 @@ VIT_MODEL_CONFIG_MAP = {
         "1K": "torchvision.ViT_L_32_Weights.IMAGENET1K_V1",
         "21K": "timm.vit_large_patch32_224.orig_in21k.PRETRAINED",
     },
+    "B8": {
+        "dino": "timm.vit_base_patch8_224.dino.PRETRAINED",
+        "21K": "timm.vit_base_patch8_224.augreg_in21k.PRETRAINED", 
+    },
+    "S8": {
+        "dino": "timm.vit_small_patch8_224.dino.PRETRAINED",
+    },
+    "deit3": {
+        "S16": "timm.deit3_small_patch16_224.fb_in22k_ft_in1k.PRETRAINED",
+        "M16": "timm.deit3_medium_patch16_224.fb_in22k_ft_in1k.PRETRAINED",
+        "B16": "timm.deit3_base_patch16_224.fb_in22k_ft_in1k.PRETRAINED",
+        "L16": "timm.deit3_large_patch16_224.fb_in22k_ft_in1k.PRETRAINED",
+    },
+    "swin": {
+        "Bp4w7": "timm.swin_base_patch4_window7_224.ms_in22k.PRETRAINED",
+        "Lp4w7": "timm.swin_large_patch4_window7_224.ms_in22k.PRETRAINED",
+    }
 }
 
 CNN_MODEL_CONFIG_MAP = {
@@ -32,7 +49,6 @@ CNN_MODEL_CONFIG_MAP = {
 }
 
 OTHER_MODEL_CONFIG_MAP = {} # In the Future, we can define the other model that not belong to both cnn and vit
-
 
 _MEAN = [0.485, 0.456, 0.406]
 _STD = [0.229, 0.224, 0.225]
@@ -57,31 +73,37 @@ TRANSFORMS_CONFIG_MAP = {
 
 DATASET_CONFIG_MAP = {
     "Br35H": {
-        "path": "dts/Br35H",
+        "path": "/home/citiai-cygnus/AlexServer/phase2/BrainTumorMedNet/dts/Br35H",
         "dataloader-mode": "binary_class",
         "num_classes": 2,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
     },
     "BT_Large_4c": {
-        "path": "dts/BT_Large_4c",
+        "path": "/home/citiai-cygnus/AlexServer/phase2/BrainTumorMedNet/dts/BT_Large_4c",
         "dataloader-mode": "split_folder",
         "num_classes": 4,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
     },
     "Figshare": {
-        "path": "dts/Figshare",
+        "path": "/home/citiai-cygnus/AlexServer/phase2/BrainTumorMedNet/dts/Figshare",
         "dataloader-mode": "flat",
         "num_classes": 3,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
     },
     "Figshare_x10": {
-        "path": "dts/Figshare_x10",
+        "path": "/home/citiai-cygnus/AlexServer/phase2/BrainTumorMedNet/dts/Figshare_x10",
         "dataloader-mode": "flat",
         "num_classes": 3,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
     },
     "MRI-Scan": {
-        "path": "dts/MRI-Scan",
+        "path": "/home/citiai-cygnus/AlexServer/phase2/BrainTumorMedNet/dts/MRI_Scan",
+        "dataloader-mode": "split_folder",
+        "num_classes": 4,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    },
+    "MRI-Scan_2": {
+        "path": "/home/citiai-cygnus/AlexServer/phase2/BrainTumorMedNet/dts/MRI_Scan_2",
         "dataloader-mode": "split_folder",
         "num_classes": 4,
         "train-val-test_ratio": (0.7, 0.1, 0.2),

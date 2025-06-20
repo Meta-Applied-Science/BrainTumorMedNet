@@ -77,3 +77,8 @@ def load_model_checkpoint(model: torch.nn.Module,
     model.eval()
 
     return model
+
+
+# Type
+# pretrained imageNet
+# Patch size    

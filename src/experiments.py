@@ -12,9 +12,9 @@ from sklearn.model_selection import StratifiedKFold
 import numpy as np
 
 from training.engine import train_val, test_step
-from model.utils import load_vit_model, load_cnn_model
-from utils.seeds import set_seeds
-from data.dataloaders import create_dataloaders
+from utils.model_utils import load_vit_model, load_cnn_model
+from utils.functions import set_seeds
+from data.data_loaders import create_dataloaders
 from utils.mapping import (
     get_vit_model_config,
     get_cnn_model_config,
@@ -110,7 +110,7 @@ def run_experiments(
         loss_fn=loss_fn,
         epochs=hparams["ne"],
         device=device,
-        secondary_metric="f1_macro", 
+        secondary_metric="accuracy", 
         topk=(1, 3),                 
         positive_label=1,           
         save_path=save_path,

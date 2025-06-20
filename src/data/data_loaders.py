@@ -95,7 +95,7 @@ def create_dataloaders(
 
     elif mode == "split_folder":
         train_dataset_full = datasets.ImageFolder(root=os.path.join(dataset_dir, "Training"), transform=transform)
-        test_dataset = ImageFolderWithPaths(root=os.path.join(dataset_dir, "Testing"), transform=transform)
+        test_dataset = datasets.ImageFolder(root=os.path.join(dataset_dir, "Testing"), transform=transform)
 
         indices = list(range(len(train_dataset_full)))
         labels = train_dataset_full.targets
