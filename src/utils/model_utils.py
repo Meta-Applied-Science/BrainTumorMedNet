@@ -30,58 +30,48 @@ def load_vit_model(device: torch.device,
     """
     parts = model_config.split(".")
     if len(parts) < 2:
-        raise ValueError("Wrong model_config!")
-    
-    source = parts[0].lower()  
-    
+        raise ValueError("Malformed model_config")
+
+    source = parts[0].lower()
+
+    # -------------------------  TORCHVISION  -------------------------
     if source == "torchvision":
-        weights_class_name = parts[1]
-        model_name = weights_class_name.lower().replace("_weights", "")
+        weights_cls_name = parts[1]
+        model_name = weights_cls_name.lower().replace("_weights", "")
+
         if len(parts) == 3:
-            weights_class = getattr(tv_models, weights_class_name)
-            weights = getattr(weights_class, parts[2])
-            
+            weights_cls = getattr(tv_models, weights_cls_name)
+            weights     = getattr(weights_cls, parts[2])
             model_transforms = weights.transforms()
+        else:  # no pretrained weights
+            weights, model_transforms = None, None
 
-        else:
-            weights = None
         model = getattr(tv_models, model_name)(weights=weights)
-    
-    elif source == "timm":
-        model_name = parts[1]+"."+parts[2]
-        print("model name:",model_name)
-        pretrained = (len(parts) >= 3)
-        model = timm.create_model(model_name, pretrained=pretrained)
-
-        # Get data configuration for the model
-        config = resolve_data_config({}, model=model)
-
-        # Create transform based on config
-        model_transforms = create_transform(**config)
-    else:
-        raise ValueError("MODEL_SOURCE shouldbe 'torchvision' or 'timm'.")
-    
-    # model = model.to(device)
-    
-    if source == "torchvision":
+        # Replace head
         in_features = model.heads.head.in_features
-        # model.heads.head = nn.Linear(in_features, num_classes).to(device)      
         model.heads.head = nn.Linear(in_features, num_classes)
 
+    # -----------------------------  TIMM  -----------------------------
     elif source == "timm":
-        # check for ViT orig
-        if isinstance(model.head, nn.Identity):
-            print("ViT original head")
-            in_features = model.num_features
-            # model.head = nn.Linear(in_features, num_classes).to(device)
-            model.head = nn.Linear(in_features, num_classes)
+        pretrained = parts[-1] == "PRETRAINED"
+        model_name = ".".join(parts[1:-1]) if pretrained else ".".join(parts[1:])
 
-        else:
-            in_features = model.head.in_features
-            # model.head = nn.Linear(in_features, num_classes).to(device)
-            model.head = nn.Linear(in_features, num_classes)
+        model = timm.create_model(
+            model_name,
+            pretrained=pretrained,
+            num_classes=num_classes,
+            global_pool="avg"       
+        )
 
-    return model,model_transforms
+        cfg = resolve_data_config({}, model=model)
+        model_transforms = create_transform(**cfg)
+
+    else:
+        raise ValueError("MODEL_SOURCE must be 'torchvision' or 'timm'")
+
+    model = model.to(device)
+
+    return model, model_transforms
 
 def load_cnn_model(device: torch.device, model_config: str, num_classes: int):
     """
