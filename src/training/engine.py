@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from training.metrics import *
-from model.utils import model_info_retrieval
+from utils.model_utils import model_info_retrieval
 import torch.nn.functional as F
 from training.metrics import (
     accuracy,

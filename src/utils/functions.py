@@ -19,9 +19,6 @@ def set_seeds(seed: int = 42) -> None:
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
-
-
-
 # === XAI Task ===
 # Prepare data transformation pipeline
 
