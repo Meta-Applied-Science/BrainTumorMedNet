@@ -41,11 +41,7 @@ def evaluate(
     secondary_metric: str = "accuracy",
     topk: Sequence[int] | Tuple[int, ...] = (1,),
     positive_label: int = 1,
-) -> Union[
-    float,
-    Tuple[float, List[float]],
-    Tuple[float, Dict[str, Union[float, List[float], torch.Tensor]]],
-]:
+) -> Tuple[float, Union[float, List[float], Dict[str, Union[float, List[float], torch.Tensor]]]]:
     """
     Run inference on `dataloader`, compute average loss and a chosen metric.
 
@@ -81,10 +77,17 @@ def evaluate(
     total_samples = 0
     all_logits, all_labels = [], []
 
-    for x, y in dataloader:
+
+    for batch in dataloader:
+        if len(batch) == 3:
+            x, y, _ = batch 
+        else:
+            x, y = batch
+
         x, y = x.to(device), y.to(device)
         logits = model(x)
         loss = loss_fn(logits, y)
+
         bs = x.size(0)
 
         total_loss += loss.item() * bs
@@ -201,7 +204,12 @@ def train_step(
     model.train()
     epoch_loss, epoch_acc = 0.0, 0.0
 
-    for X, y in dataloader:
+    for batch in dataloader:
+        if len(batch) == 3:
+            X, y, _ = batch
+        else:
+            X, y = batch
+
         X, y = X.to(device), y.to(device)
         y_pred = model(X)
         loss = loss_fn(y_pred, y)
@@ -330,13 +338,14 @@ def train_val(
         print(
             f"Epoch {epoch+1}/{epochs} | "
             f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} | "
-            f"Val Loss: {val_loss:.4f} | Val {secondary_metric}: {val_metric:.4f}"
+            f"Val Loss: {val_loss:.4f} | Val {secondary_metric}: {_fmt_metric(val_metric)}"
         )
+
         with open(log, "a", encoding="utf-8") as fh:
             fh.write(
                 f"\nEpoch {epoch+1}/{epochs} | "
                 f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} | "
-                f"Val Loss: {val_loss:.4f} | Val {secondary_metric}: {val_metric:.4f}"
+                f"Val Loss: {val_loss:.4f} | Val {secondary_metric}: {_fmt_metric(val_metric)}"
             )
             fh.write("\n" + "=" * 87)
 
@@ -349,3 +358,18 @@ def train_val(
     print(f"\nModel weights saved to: {save_path}")
 
     return results
+
+# ---------------------------------------------------------------------------
+# Internal helpers
+# ---------------------------------------------------------------------------
+
+def _fmt_metric(m):
+    if isinstance(m, list):
+        return ", ".join(f"{v:.4f}" for v in m)
+    if isinstance(m, dict):
+        parts = []
+        for k, v in m.items():
+            if isinstance(v, (int, float)):
+                parts.append(f"{k}={v:.4f}")
+        return ", ".join(parts) if parts else "<dict>"
+    return f"{m:.4f}"

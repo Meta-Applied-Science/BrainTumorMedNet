@@ -56,16 +56,11 @@ TRANSFORMS_CONFIG_MAP = {
 
 
 DATASET_CONFIG_MAP = {
+    # Phase 1
     "Br35H": {
         "path": "dts/Br35H",
         "dataloader-mode": "binary_class",
         "num_classes": 2,
-        "train-val-test_ratio": (0.7, 0.1, 0.2),
-    },
-    "BT_Large_4c": {
-        "path": "dts/BT_Large_4c",
-        "dataloader-mode": "split_folder",
-        "num_classes": 4,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
     },
     "Figshare": {
@@ -82,6 +77,19 @@ DATASET_CONFIG_MAP = {
     },
     "MRI-Scan": {
         "path": "dts/MRI-Scan",
+        "dataloader-mode": "split_folder",
+        "num_classes": 4,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    },
+    # Phase 2
+    "BT_Large_4c": {
+        "path": "dts/BT_Large_4c",
+        "dataloader-mode": "split_folder",
+        "num_classes": 4,
+        "train-val-test_ratio": (0.7, 0.1, 0.2),
+    },
+    "HF": {
+        "path": "dts/huggingFace",
         "dataloader-mode": "split_folder",
         "num_classes": 4,
         "train-val-test_ratio": (0.7, 0.1, 0.2),
@@ -112,26 +120,26 @@ OPTIMIZER_CONFIG_MAP = {
 
 METRICS_SUPPORTED = [
     "accuracy",
-    "confusion_counts",
-    "confusion_matrix",
-    "precision_binary",
-    "recall_binary",
+    "topk",
     "sensitivity",
     "specificity",
+    "precision_binary",
+    "recall_binary",
     "precision_macro",
     "recall_macro",
     "f1_macro",
     "precision_weighted",
     "recall_weighted",
     "f1_weighted",
-    "roc_auc_binary",
-    "pr_auc_binary",
+    "roc_auc",
+    "pr_auc",
     "roc_auc_ovr",
     "pr_auc_ovr",
-    "mcc_binary",
-    "kappa_binary",
-    "full", # all above metrics
+    "mcc",
+    "kappa",
+    "full",  # including 'confusion_matrix'
 ]
+
 
 
 OPTIMIZER_SUPPORTED = ["adadelta", "adam", "rmsprop"]
