@@ -7,9 +7,9 @@ ntb/utils
 ntb/XAI
 ntb/BenchTest.ipynb
 
+dts/
 
-dts/huggingFace
-dts/MRI_Scan
+results/
 
 #--------------------------
 

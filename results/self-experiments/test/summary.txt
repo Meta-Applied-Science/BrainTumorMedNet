@@ -1,2 +1,0 @@
-VGG16_case4_adam: Weights saved at /home/hoai-linh.dao/Works/MAS/BrainTumorMedNet/results/self-experiments/test/weights/adam/CNN_VGG16_BT_Large_4c_case4.pth
-B16_21K_case4_adam: Weights saved at /home/hoai-linh.dao/Works/MAS/BrainTumorMedNet/results/self-experiments/test/weights/adam/VIT_B16_21K_BT_Large_4c_case4.pth
